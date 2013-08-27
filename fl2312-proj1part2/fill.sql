@@ -1,0 +1,13 @@
+@fill_student_service.sql;
+@fill_Affiliate.sql;
+@fill_Belongs.sql;
+@fill_Core.sql;
+@fill_Pay_roll.sql;
+@fill_Purchase.sql;
+@fill_Receive.sql;
+@fill_Register.sql;
+@fill_TA.sql;
+@fill_Teach.sql;
+@fill_Work_as.sql;
+@Purchase_Insurance.sql;
+commit work;

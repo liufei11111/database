@@ -1,0 +1,237 @@
+--@drop_schema_tables.sql;
+purge recyclebin;
+
+CREATE TABLE Department(
+    did VARCHAR2(20),
+    Major VARCHAR2(20),
+    PRIMARY KEY (did),
+    constraint Major_notNull
+    check (Major != NULL)
+);
+
+CREATE TABLE Student(
+     sid  VARCHAR2(20),
+  firstname VARCHAR2(20),
+   lastname VARCHAR2(20),
+       dob DATE,
+    gpa float,
+    password VARCHAR2(20),
+    PRIMARY KEY(sid),
+    constraint Firstname_notNull
+    check (firstname != NULL ),
+     Constraint check_GPA
+        CHECK(GPA<4.3 AND GPA>=0)
+);
+
+CREATE TABLE Course(
+    cid VARCHAR2(20),
+    name VARCHAR2(20),
+    GPA FLOAT,
+    semester VARCHAR2(20),
+    Availability VARCHAR2(20),
+   -- classroom VARCHAR2(20), --we decide not to go for classroom in this part
+    PRIMARY KEY(cid),
+   Constraint check_GPA_2
+        CHECK(GPA<4.3 AND GPA>=0)
+);
+-- Here, we modify the table so that the person type can fit into the table
+create type faculty_typ as OBJECT (
+ fid VARCHAR2(20),
+ name VARCHAR2(20),
+dob  VARCHAR2(20),
+ member function show_DOB return date
+);
+/
+create or replace type body faculty_typ as 
+member function show_DOB return date  is
+begin 
+    return self.dob;
+end;
+end;
+/
+CREATE TABLE Faculty OF faculty_typ(primary key(fid))
+  OBJECT IDENTIFIER IS PRIMARY KEY;
+
+
+CREATE TABLE Student_Service(
+    Student_No VARCHAR2(20),
+    Housing VARCHAR2(20),
+    Dining FLOAT,
+      Visa VARCHAR2(20),
+    housing_cost float,
+    PRIMARY KEY(Student_No),
+constraint housingCost_positive
+    check ( housing_cost>0)
+);
+CREATE TABLE Financial_Service(
+    pid VARCHAR2(20),
+  --  tax VARCHAR2(20),--left for expansion in the part3
+ financial_aid FLOAT,
+sid VARCHAR2(20),
+ --  tuition VARCHAR2(20),--left for expansion in the part3
+       PRIMARY KEY(pid),
+    FOREIGN KEY(sid) REFERENCES Student,
+    constraint aid_notNegative
+    check (financial_aid >=0)
+);
+
+CREATE TABLE Employment(
+    SSN VARCHAR2(20),
+    TypeofEmploment VARCHAR2(20),
+    totalhours float,
+    payrate float,
+    PRIMARY KEY(SSN),
+    constraint totalWork_notZero
+    check (totalhours >=0)
+);
+CREATE TYPE insurance_typ AS OBJECT(
+ iid  VARCHAR2(20),
+    plan_type VARCHAR2(20),
+    Company_Name VARCHAR2(20),
+    cost FLOAT,
+    card_no VARCHAR2(20),
+     member function after_discount(discount in float) return float 
+);
+/
+CREATE OR REPLACE type body insurance_typ as
+member function after_discount(discount  float) return float is
+begin
+    return  discount * self.cost;
+end;
+end;
+/
+CREATE TABLE Insurance_obj_table of insurance_typ(PRIMARY KEY(iid))
+        OBJECT IDENTIFIER IS PRIMARY KEY;
+CREATE TABLE ClubAdviser(
+    clubid  VARCHAR2(20),
+    fid VARCHAR2(20),
+    name VARCHAR2(20),
+    PRIMARY KEY(clubid),
+    FOREIGN KEY(fid) REFERENCES Faculty
+   );
+CREATE TABLE DinningHall(
+    name VARCHAR2(20),
+    dinning_manager VARCHAR2(20) NOT NULL,
+        PRIMARY KEY(name)
+    );
+CREATE TABLE Residential_college(
+    RCname VARCHAR2(20),
+    residential_manager VARCHAR2(20) NOT NULL,
+        PRIMARY KEY(RCname)
+    );
+--Below are relationship tables
+CREATE TABLE join(
+    sid  VARCHAR2(20),
+    clubid VARCHAR2(20),
+    startDate Date,
+    endDate Date,
+    PRIMARY KEY(sid,clubid),
+    FOREIGN KEY(sid) REFERENCES Student,
+    FOREIGN KEY(clubid) REFERENCES ClubAdviser
+ );
+
+CREATE TABLE Core (
+   -- Major VARCHAR2(20),--left for expansion in part3
+    did VARCHAR2(20),
+    cid VARCHAR2(20),
+    primary key(did,cid),
+    FOREIGN KEY (did) REFERENCES Department, 
+      FOREIGN KEY (cid) REFERENCES Course
+);
+
+CREATE TABLE Affiliate (
+     sid VARCHAR2(20),
+did VARCHAR2(20),
+          primary key(sid),
+    FOREIGN KEY (did) REFERENCES Department,
+    FOREIGN KEY (sid) REFERENCES Student
+);
+
+CREATE TABLE Register (
+   cid VARCHAR2(20),
+  sid VARCHAR2(20),
+  GPA float,
+       primary key(sid,cid),
+    FOREIGN KEY (cid) REFERENCES Course,
+    FOREIGN KEY (sid) REFERENCES Student,
+ Constraint check_GPA_3
+        CHECK(GPA<=4.3 AND GPA>=0)
+);
+CREATE TABLE Receive(
+    sid VARCHAR2(20),
+    student_no VARCHAR2(20),
+    EndDate DATE,
+    PRIMARY KEY (sid,student_no),
+    FOREIGN KEY (sid) REFERENCES Student,
+    FOREIGN KEY (student_no) REFERENCES Student_Service
+);
+CREATE TABLE Teach(
+    fid VARCHAR2(20),
+    cid VARCHAR2(20),
+    Primary key(fid,cid),
+    FOREIGN KEY (fid) REFERENCES faculty,
+    FOREIGN KEY (cid) REFERENCES Course
+);
+
+CREATE TABLE TA(
+    sid VARCHAR2(20),
+    cid VARCHAR2(20),
+    Primary key(sid,cid),
+    FOREIGN KEY (sid) REFERENCES  Student,
+    FOREIGN KEY (cid) REFERENCES Course
+);
+
+
+
+
+
+CREATE TABLE Work_as(
+    sid VARCHAR2(20),
+    ssn VARCHAR2(20),
+    PRIMARY KEY (sid, ssn),
+    FOREIGN KEY (sid) REFERENCES Student,
+    FOREIGN KEY (ssn) REFERENCES Employment
+);
+
+CREATE TABLE Pay_roll(
+    pid VARCHAR2(20),
+ ssn VARCHAR2(20),
+       PRIMARY KEY ( pid, ssn),
+    FOREIGN KEY (pid) REFERENCES Financial_Service,
+     FOREIGN KEY (ssn) REFERENCES Employment
+);
+CREATE TABLE Belongs(
+did VARCHAR2(20),
+fid VARCHAR2(20),
+primary key(did,fid),
+foreign key(did) references Department,
+foreign key (fid) references Faculty
+);
+CREATE TABLE Purchase_Insurance(
+iid VARCHAR2(20),
+pid VARCHAR2(20),
+startDate DATE,
+EndDate DATE,
+primary key(iid,pid),
+foreign key(iid) references Insurance_obj_table,
+foreign key (pid) references Financial_service);
+CREATE TABLE Spend_dinningplan(
+swipeID VARCHAR2(20),
+student_no VARCHAR2(20),
+Name VARCHAR2(20),
+primary key(swipeID),
+foreign key(student_no) references Student_Service,
+foreign key (Name) references DinningHall);
+CREATE TABLE locate(
+dinningName VARCHAR2(20),
+RCName VARCHAR2(20),
+primary key(dinningName,RCName),
+foreign key(dinningName) references dinningHall,
+foreign key (RCname) references Residential_college);
+
+CREATE TABLE live_in(
+RCname VARCHAR2(20),
+student_no VARCHAR2(20),
+primary key(student_no,RCName),
+foreign key(student_no) references student_service,
+foreign key (RCname) references Residential_college);

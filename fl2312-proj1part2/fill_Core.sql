@@ -1,0 +1,11 @@
+insert into Core (did,cid) values('20001','30001');
+insert into Core (did,cid) values('20002','30002');
+insert into Core (did,cid) values('20003','30003');
+insert into Core (did,cid) values('20007','30004');
+insert into Core (did,cid) values('20006','30005');
+insert into Core (did,cid) values('20006','30006');
+insert into Core (did,cid) values('20005','30007');
+insert into Core (did,cid) values('20004','30008');
+insert into Core (did,cid) values('20006','30009');
+insert into Core (did,cid) values('20004','30010');
+insert into Core (did,cid) values('20004','30011');

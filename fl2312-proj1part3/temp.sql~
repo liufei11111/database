@@ -1,0 +1,3 @@
+select s.sid, s.firstname, s.lastname, ss.student_No, rc.RCname, dh.name
+From Student_Service ss, live_in li, Residential_College rc, locate l, DinningHall dh, Spend_DinningPlan sd, Student s, Receive r
+Where s.sid=r.sid and r.student_No=ss.student_No and ss.student_No=li.student_No and li.RCname=rc.RCname and rc.RCname=l.RCname and l.dinningname=dh.name and dh.name=sd.name and sd.student_No=ss.student_No;

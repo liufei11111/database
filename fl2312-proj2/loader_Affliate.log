@@ -1,0 +1,8 @@
+
+SQL*Loader: Release 10.2.0.1.0 - Production on Sun Oct 28 00:02:04 2012
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+SQL*Loader-500: Unable to open file (loader_Affliate.ctl)
+SQL*Loader-553: file not found
+SQL*Loader-509: System error: No such file or directory

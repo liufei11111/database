@@ -1,0 +1,54 @@
+
+SQL*Loader: Release 10.2.0.1.0 - Production on Sun Oct 28 14:08:07 2012
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+Control File:   loader_Affiliate.ctl
+Data File:      ./Affiliate.csv
+  Bad File:     Affiliate.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Bind array:     64 rows, maximum of 256000 bytes
+Continuation:    none specified
+Path used:      Conventional
+
+Table AFFILIATE, loaded from every logical record.
+Insert option in effect for this table: INSERT
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+DID                                 FIRST     *   ,       CHARACTER            
+    Enclosure string : '""'
+SID                                  NEXT     *   ,       CHARACTER            
+    Enclosure string : '""'
+
+SQL*Loader-500: Unable to open file (./Affiliate.csv)
+SQL*Loader-553: file not found
+SQL*Loader-509: System error: No such file or directory
+SQL*Loader-2026: the load was aborted because SQL Loader cannot continue.
+
+Table AFFILIATE:
+  0 Rows successfully loaded.
+  0 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                  33024 bytes(64 rows)
+Read   buffer bytes: 1048576
+
+Total logical records skipped:          0
+Total logical records read:             0
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Sun Oct 28 14:08:07 2012
+Run ended on Sun Oct 28 14:08:07 2012
+
+Elapsed time was:     00:00:00.06
+CPU time was:         00:00:00.00

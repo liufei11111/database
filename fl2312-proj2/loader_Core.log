@@ -1,0 +1,83 @@
+
+SQL*Loader: Release 10.2.0.1.0 - Production on Sat Oct 27 23:22:20 2012
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+Control File:   loader_Core.ctl
+Data File:      ./Core.csv
+  Bad File:     Core.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Bind array:     64 rows, maximum of 256000 bytes
+Continuation:    none specified
+Path used:      Conventional
+
+Table CORE, loaded from every logical record.
+Insert option in effect for this table: INSERT
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+DID                                 FIRST     *   ,       CHARACTER            
+    Enclosure string : '""'
+CID                                  NEXT     *   ,       CHARACTER            
+    Enclosure string : '""'
+
+Record 1: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 2: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 3: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 4: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 5: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 6: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 7: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 8: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 9: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 10: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+Record 11: Rejected - Error on table CORE.
+ORA-02291: integrity constraint (FL2312.SYS_C00275013) violated - parent key not found
+
+
+Table CORE:
+  0 Rows successfully loaded.
+  11 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                  33024 bytes(64 rows)
+Read   buffer bytes: 1048576
+
+Total logical records skipped:          0
+Total logical records read:            11
+Total logical records rejected:        11
+Total logical records discarded:        0
+
+Run began on Sat Oct 27 23:22:20 2012
+Run ended on Sat Oct 27 23:22:20 2012
+
+Elapsed time was:     00:00:00.07
+CPU time was:         00:00:00.00

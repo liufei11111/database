@@ -1,0 +1,46 @@
+--We applied object type and member method.
+--This one shows the member method I add into faculty table, which
+--is a table of faculty_typ.
+--This query uses the current date and the date of birth
+--to calculate the age.
+--Notice that p.show_DOB() calls the member method.
+
+select p.fid,p.name, months_between(to_char(TRUNC(sysdate),'DD-MON-YYYY'),
+   to_char( to_date( Trunc( p.show_DOB()),'DD-MON-YYYY')))/12
+as age from dual,
+faculty p
+where p.fid in (select fid from faculty);
+
+--This is just show a member method for the type insurance_typ. The
+--difference is that it takes one parameter.
+--show idd,plan_type,DiscountedPrice of those advanced policy holder and 
+--their premium is above 4000
+
+select *
+FROM
+(select p.iid,p.plan_type,p.after_discount(0.95) as DiscountedPrice
+from insurance_obj_table p
+where p.plan_type='Advanced')T1
+where discountedprice>4000;
+
+-- This query found the tuition through multiple causes
+--tuition=#courses*5*5000-TA-financial_aid+housing_cost
+--+insurance-after-discount
+
+SELECT T1.sid,T2.numberofCourse*5*3000 - T3.totalpayoffofEmployment- T1.financialaid+ housing_cost + i3.after_discount(0.95) as TuitionDue,ss3.housing, i3.Company_name as InsuCompany,i3.plan_type
+FROM (Select  s.sid,s.firstname,s.lastname,f.financial_aid as financialaid
+FROM student s, Financial_service f
+Where s.sid=f.sid) T1,
+(SELECT s.sid,count(*) as numberofCourse
+FROM course c, student s, register r
+Where c.cid=r.cid AND s.sid=r.sid
+Group by s.sid)T2,
+(Select s.sid,totalhours*payrate as totalpayoffofEmployment
+From student s, employment e, work_as w
+Where s.sid=w.sid AND e.ssn=w.ssn)T3,Receive r3, Student_Service
+ss3,purchase_insurance pi3,insurance_obj_table i3,Financial_service fs3
+Where T1.sid=T2.sid AND T3.sid=T2.sid AND r3.Student_No=ss3.Student_No 
+AND r3.sid=T1.sid AND pi3.pid=fs3.pid AND fs3.sid=T1.sid AND pi3.iid=i3.iid;
+
+
+

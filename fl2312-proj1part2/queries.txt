@@ -1,0 +1,51 @@
+--search course information for student whose sid is 10008
+SELECT T1.sid, T1.firstname, T1.lastname, T1.Faculty_Name, T1.CourseGpa,
+s.firstname as TAfirstname, s.lastname as TAlastname
+FROM(SELECT s.sid,s.firstname,s.lastname,f.name as Faculty_Name,r.gpa as
+CourseGpa, ta.sid as TA_sid
+FROM Student s, Register r, Course c, Faculty f, TA ta, teach te
+Where s.sid=r.sid AND r.cid=c.cid AND c.cid =ta.cid AND te.cid=c.cid AND
+te.fid=f.fid AND s.sid='10008')T1, student s
+Where T1.TA_sid=s.sid;
+
+-- This query found the tuition through multiple causes
+--tuition=#courses*5*5000-TA .financial-aid
+SELECT T1.sid,T2.numberofCourse*5*3000 - T3.totalpayoffofEmployment- T1.financialaid as TuitionDue
+FROM (Select  s.sid,s.firstname,s.lastname,f.financial_aid as financialaid
+FROM student s, Purchase p, Financial_service f
+Where s.sid=p.sid AND p.pid=f.pid) T1,
+(SELECT s.sid,count(*) as numberofCourse
+FROM course c, student s, register r
+Where c.cid=r.cid AND s.sid=r.sid
+Group by s.sid)T2,
+(Select s.sid,totalhours*payrate as totalpayoffofEmployment
+From student s, employment e, work_as w
+Where s.sid=w.sid AND e.ssn=w.ssn)T3
+Where T1.sid=T2.sid AND T3.sid=T2.sid;
+
+-- Find the course names and sid and and the grade for the the lowest grade of the student who had the highest average GPA in fall semester of their own departments.
+SELECT T4.sid,c3.name,R3.gpa as LowestGradeOftheBestStudent
+FROM
+(SELECT T3.sid,Min(R2.gpa) as lowestGradeofBestStudentInFall
+FROM
+(SELECT s1.firstname, s1.lastname,s1.sid,T2.did,T2. DeptMaxGPA
+FROM
+(SELECT A.did, max(T1.avgGPA) as DeptMaxGPA
+FROM 
+(SELECT s.sid, AVG(r.gpa) as avgGPA
+FROM Student s, Course c,Register r
+Where s.sid=r.sid AND c.cid=r.cid AND c.semester like 'Fall'
+Group by s.sid
+)T1, Affiliate A
+Where A.sid=T1.sid
+Group by A.did) T2 ,Student  S1, Affiliate A1
+Where s1.sid=A1.sid AND T2.did=A1.did) T3, Register R2
+Where R2.sid=T3.sid 
+Group by T3.sid) T4, Register R3, Course c3
+Where T4.sid=R3.sid AND c3.cid=r3.cid AND R3.gpa<=T4.
+lowestGradeofBestStudentInFall;
+
+
+
+
+
